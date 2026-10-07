@@ -215,8 +215,3 @@ Interactive Swagger documentation is available at **`http://127.0.0.1:8000/docs`
 | **FPDF / FPDF2** | Programmatic report and document PDF generation |
 | **pdfplumber** | Accurate text extraction from uploaded PDF documents |
 | **python-jose & passlib** | JWT authentication and bcrypt password hashing |
-
----
-
-## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
