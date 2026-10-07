@@ -1,4 +1,4 @@
-# 📋 AI Requirement Analyzer (ArchReq-AI)
+# 📋 ReqLens: AI-Requirement-Analyzer-Consulting-Engine
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.128%2B-009688.svg)](https://fastapi.tiangolo.com/)
