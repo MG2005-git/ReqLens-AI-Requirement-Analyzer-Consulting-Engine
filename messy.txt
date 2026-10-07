@@ -1,0 +1,17 @@
+
+
+This     is      a      badly formatted     requirement.
+
+
+
+It has     random spaces.
+
+
+
+And extra newlines.
+
+
+
+
+
+End.

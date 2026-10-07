@@ -1,0 +1,16 @@
+fastapi
+uvicorn
+psycopg2-binary
+python-jose
+passlib[bcrypt]
+python-multipart
+pdfplumber
+reportlab
+pytest
+httpx
+python-dotenv
+requests
+fpdf2
+sentence-transformers
+faiss-cpu
+numpy

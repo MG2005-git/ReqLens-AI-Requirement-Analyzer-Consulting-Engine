@@ -1,0 +1,23 @@
+Client Project Brief
+
+The client is planning to construct a mid-sized residential building on a plot of approximately 4,500 sqft. 
+The building is expected to have ground plus three floors (G+3) with a total built-up area close to 10,000 sqft.
+
+The primary use of the building will be residential apartments, with one 3BHK unit per floor.
+The client has mentioned a tentative construction budget of around 1.2 million USD, but this may be adjusted 
+based on material choices and final design decisions.
+
+Parking space for at least 6 cars is required on the ground floor. 
+The client has also expressed interest in having a small landscaped area and rooftop access.
+
+At this stage, the client has not finalized the exact floor heights, structural system, 
+or local zoning and building regulations. These details are expected to be discussed later.
+
+We want to build a mobile app for architects.
+
+The app should allow:
+- Uploading building requirements
+- Generating initial layout suggestions
+- Exporting the results as a PDF
+
+The client wants fast iteration and clarity.

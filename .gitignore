@@ -1,0 +1,50 @@
+# Virtual Environment
+.venv/
+.env/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+#Environment variables
+.env
+.env.*
+
+# Logs
+*.log
+
+# VS code
+.vscode/
+
+# OS files
+.DS_store
+Thumbs.db
+
+#Build Files
+dist/
+build/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints/
+
+#vectorDb
+vector_db/
+
+#pdf-output-sample
+pdf_output_sample/
+
+#pastversion
+past_version/
+
+#gendocs
+generate_docs/
+
+#test
+test/
+
+#inputs
+inputs/
