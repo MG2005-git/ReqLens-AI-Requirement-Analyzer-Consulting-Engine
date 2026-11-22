@@ -1,0 +1,29 @@
+# Virtual Environment
+.venv/
+.env
+.env.*
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Local data & databases
+app.db
+*.sqlite3
+vector_db/
+generate_docs/
+pdf_output_sample/
+past_version/
+test/
+
+# Git & IDE
+.git/
+.gitignore
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,4 +1,5 @@
 from fastapi import FastAPI , UploadFile , File , HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from app.services.parser import analyze_file
 from datetime import datetime
@@ -8,7 +9,16 @@ from app.api.documents import router as documents_router
 from app.database import engine
 from app import models
 
-app = FastAPI()
+app = FastAPI(title="ReqLens AI Requirement Analyzer")
+
+# Enable CORS for web browsers and external clients
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 models.Base.metadata.create_all(bind=engine)
 app.include_router(auth_router)
