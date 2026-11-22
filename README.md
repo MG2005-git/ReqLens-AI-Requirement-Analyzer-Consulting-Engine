@@ -1,12 +1,3 @@
----
-title: ReqLens AI Requirement Analyzer
-emoji: 📋
-colorFrom: blue
-colorTo: indigo
-sdk: docker
-app_port: 7860
----
-
 # 📋 ReqLens: AI-Requirement-Analyzer-Consulting-Engine
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
