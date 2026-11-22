@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker , declarative_base, Session
 
 load_dotenv()
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:admin@localhost:5432/archreq_db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./app.db")
 
 # Fix for cloud providers (Supabase, Neon, Render) that output postgres://
 if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
