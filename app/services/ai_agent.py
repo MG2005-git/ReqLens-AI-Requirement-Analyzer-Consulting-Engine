@@ -168,22 +168,48 @@ class LLMRequirementRefiner:
             return ARCHITECT_PROMPT.replace("<USER_INPUT>", user_input)
 
     def _call_llm(self, messages: list, temperature: float = 0.2, timeout: int = 600) -> str:
-        payload = {
-            "model": self.model,
-            "messages": messages,
-            "temperature": temperature,
-        }
+        # Candidate models to try in order if a model is unavailable or lacks permissions
+        candidate_models = [self.model]
+        for fallback in ["llama-3.1-8b-instant", "openai/gpt-oss-120b", "llama-3.3-70b-versatile", "llama-3.1-70b-versatile"]:
+            if fallback not in candidate_models:
+                candidate_models.append(fallback)
+
         headers = {"Content-Type": "application/json"}
         if self.api_key:
             headers["Authorization"] = f"Bearer {self.api_key}"
-        response = requests.post(self.url, json=payload, headers=headers, timeout=timeout)
-        # for debugging, preserve status and raw text if problems arise
-        print("STATUS:", response.status_code)
-        if response.status_code != 200:
-            print("RAW RESPONSE:", response.text)
-        response.raise_for_status()
-        data = response.json()
-        return data["choices"][0]["message"]["content"].strip()
+
+        last_response = None
+        for model_name in candidate_models:
+            payload = {
+                "model": model_name,
+                "messages": messages,
+                "temperature": temperature,
+            }
+            try:
+                response = requests.post(self.url, json=payload, headers=headers, timeout=timeout)
+                print(f"STATUS ({model_name}):", response.status_code)
+                if response.status_code == 200:
+                    self.model = model_name  # lock onto working model
+                    data = response.json()
+                    return data["choices"][0]["message"]["content"].strip()
+
+                print(f"RAW RESPONSE ({model_name}):", response.text)
+                last_response = response
+                # If it's a 404 (model not found/no access) or 400 (model deprecated), try next candidate
+                if response.status_code in [400, 404]:
+                    continue
+                else:
+                    response.raise_for_status()
+            except requests.exceptions.HTTPError:
+                raise
+            except Exception as e:
+                print(f"Network error trying {model_name}:", e)
+                last_response = None
+                raise
+
+        if last_response is not None:
+            last_response.raise_for_status()
+        raise RuntimeError("All candidate LLM models failed.")
 
     # --- public API --------------------------------------------------------
     def analyze(self, raw_text: str) -> dict:

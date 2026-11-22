@@ -7,18 +7,25 @@ from sqlalchemy.orm import Session
 
 from app.utils.chunkers import chunk_text
 
+from app.database import SessionLocal
 import json
 
-def process_document_async(db: Session,document_id: int):
+def process_document_async(document_id: int, db: Session = None):
     """
         Background worker to process document fully.
         Run after upload.
     """
+    owns_db = False
+    if db is None:
+        db = SessionLocal()
+        owns_db = True
 
-
-    document = db.query(models.Document).get(document_id)
-
+    document = None
     try:
+        document = db.query(models.Document).filter(models.Document.id == document_id).first()
+        if not document:
+            return
+
         document.status = models.ProcessingStatus.processing
         db.commit()
        
@@ -84,15 +91,19 @@ def process_document_async(db: Session,document_id: int):
         ai = DocumentAI(domain=document.domain)
         result = ai.analyze_document(full_text)
 
-        
         document.extracted_data = result["structured_data"]
         document.clean_requirements = result["refine_text"]
+        document.analysis_result = result
         document.status = models.ProcessingStatus.processed
 
         db.commit()
 
     except Exception as e:
         print("Real error:",e)
-        document.status = models.ProcessingStatus.failed
-        document.error_message = str(e)
-        db.commit()
+        if document:
+            document.status = models.ProcessingStatus.failed
+            document.error_message = str(e)
+            db.commit()
+    finally:
+        if owns_db:
+            db.close()

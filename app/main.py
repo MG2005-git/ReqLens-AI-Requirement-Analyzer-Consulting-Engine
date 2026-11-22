@@ -1,4 +1,5 @@
 from fastapi import FastAPI , UploadFile , File , HTTPException
+from fastapi.responses import RedirectResponse
 from app.services.parser import analyze_file
 from datetime import datetime
 from app.services.ai_agent import analyze_requirements_with_ai
@@ -12,7 +13,12 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 app.include_router(auth_router)
 app.include_router(documents_router)
-@app.get("/")
+
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="/docs")
+
+@app.get("/health")
 def health_check():
     return {"status" : "ok"}
 

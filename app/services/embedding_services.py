@@ -4,7 +4,10 @@ import numpy as np
 
 class EmbeddingService:
     def __init__(self):
-        self.model = SentenceTransformer("all-MiniLM-L6-v2")
+        try:
+            self.model = SentenceTransformer("all-MiniLM-L6-v2", local_files_only=True)
+        except Exception:
+            self.model = SentenceTransformer("all-MiniLM-L6-v2")
         self.index = None
         self.chunk_texts = []
 

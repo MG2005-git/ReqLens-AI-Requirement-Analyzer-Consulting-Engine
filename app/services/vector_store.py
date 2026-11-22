@@ -38,16 +38,26 @@ class VectorStore:
     #-------------------------
 
     def search(self, doc_id: int,   query_embedding,top_k = 5):
-        index = faiss.read_index(self._index_path(doc_id))
+        idx_path = self._index_path(doc_id)
+        meta_path = self._meta_path(doc_id)
 
-        with open(self._meta_path(doc_id),"rb") as f:
+        if not os.path.exists(idx_path) or not os.path.exists(meta_path):
+            return []
+
+        index = faiss.read_index(idx_path)
+
+        with open(meta_path,"rb") as f:
             texts = pickle.load(f)
+
+        if not texts:
+            return []
 
         query_vector = np.array([query_embedding]).astype("float32")
 
-        distances, indices = index.search(query_vector, top_k)
+        actual_k = min(top_k, len(texts))
+        distances, indices = index.search(query_vector, actual_k)
 
-        results = [str(texts[i]) for i in indices[0]]
+        results = [str(texts[i]) for i in indices[0] if 0 <= i < len(texts)]
         return results
 
 

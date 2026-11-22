@@ -47,6 +47,10 @@ class Document(Base):
     # full JSON result returned by LLM analysis (structured + metadata)
     analysis_result = Column(JSON, nullable=True)
 
+    @property
+    def analysis(self):
+        return self.analysis_result
+
 
     user = relationship("User", back_populates="documents")
    # analysis = relationship("Analysis", back_populates="document", uselist=False)

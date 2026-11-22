@@ -45,6 +45,7 @@ class DocumentResponse(BaseModel):
     clean_requirements: str | None = None
     # full LLM analysis (structured data, possibly other fields)
     analysis: dict | None = None
+    analysis_result: dict | None = None
 
     class Config:
         from_attributes = True

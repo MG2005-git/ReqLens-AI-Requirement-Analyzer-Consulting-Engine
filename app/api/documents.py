@@ -210,7 +210,6 @@ async def upload_document(
         
         background_tasks.add_task(
             process_document_async,
-            db,
             document.id
         )
 
@@ -261,17 +260,13 @@ def analyze_document(
         raise HTTPException(status_code=404, detail="document not found")
     
     if document.status == ProcessingStatus.processed:
-        raise HTTPException(
-            status_code=400,
-            detail="Document already analyzed"
-        )
-    print(document.status)
-    if document.status != ProcessingStatus.processing:
-        raise HTTPException(
-            status_code= 400,
-            detail="Document not ready for analysis"
-        )
-       
+        return {
+            "status": "processed",
+            "document_id": document.id,
+            "analysis": document.analysis_result or {"structured_data": document.extracted_data},
+            "extracted_data": document.extracted_data,
+            "clean_requirements": document.clean_requirements
+        }
     
     document.status = ProcessingStatus.processing
     db.commit()
@@ -349,10 +344,12 @@ def download_document(
         raise HTTPException(status_code=404, detail="Document not analyzed yet")
     
 
+    analysis_payload = document.analysis_result or {"structured_data": document.extracted_data}
+
     file_path = generate_requirements_pdf(
         document.id,
         document.clean_requirements,
-        analysis=document.analysis_result,
+        analysis=analysis_payload,
     )
 
     return FileResponse(
@@ -400,8 +397,6 @@ def ask_document(
         raise HTTPException(404,"Document not found")
     
     rag  = RAGservice(db, document_id)
-
-    rag.load_document_chunks(document_id)
 
     result = rag.ask(question)
 
